@@ -128,7 +128,8 @@ class MyApp(QMainWindow):
             if len(picture_size) >= 4:
                 pyautogui.screenshot("%s.png" % i, region=(picture_size[0], picture_size[1],
                 picture_size[2]-picture_size[0],picture_size[3]-picture_size[1]))
-            pyautogui.click(*next_page)
+            # pyautogui.click(*next_page) # 마우스 클릭으로 페이지 넘기기
+            pyautogui.press('down') # 아래 방향키로 페이지 넘기기
             rest_of_percent += 40//page
             self.pbar.setValue(60+rest_of_percent)
             time.sleep(0.8)

@@ -6,6 +6,7 @@ import time
 from pynput import mouse
 import PyQt5
 from PIL import Image
+import random
 
 page = 0   # 찍을 페이지 수  
 picture_size = [] #왼쪽 상단 좌표 , 오른쪽 하단 좌표
@@ -128,11 +129,19 @@ class MyApp(QMainWindow):
             if len(picture_size) >= 4:
                 pyautogui.screenshot("%s.png" % i, region=(picture_size[0], picture_size[1],
                 picture_size[2]-picture_size[0],picture_size[3]-picture_size[1]))
-            # pyautogui.click(*next_page) # 마우스 클릭으로 페이지 넘기기
-            pyautogui.press('down') # 아래 방향키로 페이지 넘기기
+
+            # 평균 0, 표준편차 10
+            jitter_x = random.gauss(0, 10)
+            jitter_y = random.gauss(0, 10)
+            x, y = next_page[-1]
+            pyautogui.moveTo(x + jitter_x, y + jitter_y, duration=random.uniform(0.1, 0.5))
+            time.sleep(random.uniform(0.05, 0.2))         # 자연스러운 멈춤 추가
+            pyautogui.click((x + jitter_x, y + jitter_y)) # 마우스 클릭으로 페이지 넘기기
+
+            # pyautogui.press('down') # 아래 방향키로 페이지 넘기기
             rest_of_percent += 40//page
             self.pbar.setValue(60+rest_of_percent)
-            time.sleep(0.8)
+            time.sleep(random.randrange(8, 21) / 10)
         self.pbar.setValue(100)
         msg = "이미지 캡쳐 완료. PDF메뉴를 눌러 PDF로 변환하세요!"
         self.status(msg)
